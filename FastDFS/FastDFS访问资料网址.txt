@@ -1,0 +1,12 @@
+https://baijiahao.baidu.com/s?id=1588881983988039766&wfr=spider&for=pc  FastDFS的认识
+https://blog.csdn.net/xingjiarong/article/details/50752586          FastDFS配置文件参数信息
+https://www.cnblogs.com/chiangchou/p/fastdfs.html                FastDFS一步步搭建
+https://blog.csdn.net/u012453843/article/details/68957209        FastDFS分布式搭建
+https://www.cnblogs.com/ityouknow/p/8298358.html             SpringBoot整合FastDFS
+
+
+
+
+https://blog.csdn.net/jsutdoit/article/details/82120336        HDFS搭建
+https://blog.csdn.net/qq_33247435/article/details/83002895  HDFS详细搭建
+https://blog.csdn.net/a519781181/article/details/79125379/   HDFS与FasrDFS测试对比

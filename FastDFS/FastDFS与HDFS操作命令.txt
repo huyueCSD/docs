@@ -1,0 +1,77 @@
+--将虚拟机关机 shutdown -h now
+--将某个文件夹的东西赋值到其他  设备上 scp -r /usr/local/software/ root@192.168.156.6:/usr/local/
+--关闭防火墙：service iptables stop 
+--创建软连接 ln -s /ljzsg/fastdfs/file/data/ /ljzsg/fastdfs/file/data/M00 
+--关闭防火墙自启：chkconfig iptables off
+--复制文件到某目录下 cp mod_fastdfs.conf /etc/fdfs/
+--解压  tar -xzvf 文件名
+--解压zip文件   unzip aa.zip   
+--删除 rm -rf 文件名
+--创建文件夹  mkdir -p /aaa/bbb
+--修改文件名或位置  mv  老文件位置和名   新文件位置和名 
+--修改文本文件   vim 文件名
+--编译安装 make          make install
+
+HDFS
+--文件储存路径 /user/root
+--文件上传 hadoop fs -put /本地文件  /aaa
+--文件下载  hadoop fs -get /hdfs中的路径   /本地磁盘目录
+-- hdfs中创建文件夹hadoop fs -mkdir  -p /aaa/xxx
+--移动hdfs中的文件（更名）hadoop -fs -mv /hdfs路径_1  / hdfs路径2
+--删除hdfs中的文件或文件夹  hadoop fs -rm -r /aaa
+--查看hdfs中的文本文件内容 hadoop fs -cat /demo.txt
+--浏览器上查看HDFS详情 http://192.168.119.136:50070
+--HDFS启动   cd /opt/hadoop/hadoop-2.7.5/sbin/     start-all.sh              stop-all.sh
+
+
+FastDFS
+--查看所有命令 cd /usr/bin/ && ls | grep fdfs
+--文件上传 /usr/bin/fdfs_upload_file /etc/fdfs/client.conf  namei.jpeg
+--文件下载 /usr/bin/fdfs_download_file /etc/fdfs/client.conf namei.jpeg
+--文件删除 /usr/bin/fdfs_delete_file /etc/fdfs/client.conf namei.jpeg
+--http上查看图片 http://192.168.119.128:80/文件名
+--设置开机启动 vim /etc/rc.local   添加一行：/usr/local/nginx/sbin/nginx
+--添加模块 ./configure --add-module=../fastdfs-nginx-module-master/src
+--查看tracker是否已经启动   ps -ef | grep fdfs
+--tracker停止   /etc/init.d/fdfs_trackerd stop
+--tracker启动   /etc/init.d/fdfs_trackerd start
+--storage启动  /etc/init.d/fdfs_storaged start
+--storage停止  /etc/init.d/fdfs_storaged stop
+--启动nginx  cd /usr/local/nginx/sbin/    ./nginx
+--重启nginx   /usr/local/nginx/sbin/nginx -s reload
+mvn install:install-file -DgroupId=org.csource -DartifactId=fastdfs-client-java -Dversion=5.0.4 -Dpackaging=jar -Dfile=C:\Users\administr\Desktop\fastdfs_client.jar
+---------------------
+
+
+GATEWAY=192.168.23.2
+NETMASK=255.255.255.0
+192.168.119.136 node01
+192.168.119.137 node02
+192.168.119.138 node03
+192.168.119.139 node04
+<property>
+<name>fs.defaultFS</name>
+<value>hdfs://node01:9000</value>
+</property>
+<property>
+<name>hadoop.tmp.dir</name>
+<value>/var/abc/hadoop/cluster</value>
+</property>
+ssh-copy-id -i ~/.ssh/id_rsa.pub root@node01
+ssh-copy-id -i ~/.ssh/id_rsa.pub root@node02
+ssh-copy-id -i ~/.ssh/id_rsa.pub root@node03
+ssh-copy-id -i ~/.ssh/id_rsa.pub root@node04
+mkdir /opt/java
+mkdir /opt/hadoop
+
+export JAVA_HOME=/opt/java/jdk1.8.0_51
+export HADOOP_HOME=/opt/hadoop/hadoop-2.7.5
+export PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH
+
+export HADOOP_HOME=/opt/hadoop/hadoop-2.7.5
+export JAVA_HOME=/opt/java/jdk1.8.0_51
+export PATH=$PATH:$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+
+
+
+

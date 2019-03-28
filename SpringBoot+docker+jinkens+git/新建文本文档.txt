@@ -1,0 +1,77 @@
+创建一个SpringBoot项目 可运行的
+创建虚拟机
+安装CentOS7系统 桥接模式 （因为后面要进行联网下载文件）
+使用Xshell工具连接远程服务器
+在系统中安装JDK1.8
+安装maven
+安装git
+如果不会可以参照一下文章
+安装jdk  https://blog.csdn.net/small_love/article/details/77394721，
+安装maven  https://blog.csdn.net/vipbupafeng/article/details/80277126，
+安装git  https://blog.csdn.net/javaee_sunny/article/details/80450153，
+
+查看版本号
+Java -version
+mvn -version 
+git version
+
+安装jenkins
+1.进入jenkins的安装目录
+2.获取jenkins安装源文件  
+wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
+3.导入公钥
+rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+4.安装jenkins
+yum install -y jenkins
+5.修改jenkins  端口为8787（修改配置文件）
+vim /etc/sysconfig/jenkins
+JENKINS_PORT='8787'
+6.修改jenkins的jdk的安装路径
+vim  /etc/init.d/jenkins
+candidates=""中的/usr/bin/java  修改为你的jdk安装路径    /usr/local/src/java/jdk1.8.0_51/bin/java  这是我的  
+7.配置防火墙放心jenkins端口（8787）
+8.重启jenkins
+9.使用浏览器 http://192.168.0.202:8787
+进入之后让你输入密码  密码在/var/lib/................提示的目录下
+vim /var/lib/...................
+10.进入后可能是离线状态
+此时不要在当前窗口操作
+再打开一个tab窗口输入http://192.168.0.202:8787//pluginManager/advanced
+在最下方的URL中修改为http://updates.jenkins.io/update-center.json   提交
+11.重启jenkins
+service jenkins restart
+12.在之前的离线窗口刷新 再次执行输入密码操作
+13.页面会跳转等待后进入CUstomize Jenkins 页面 选择安装（选第一个默认安装）
+14.安装之后重启jenkins     刷新页面
+安装docker
+可以参考
+安装docker https://blog.csdn.net/kuqq2005/article/details/76359327，
+
+回到jenkins页面
+1.配置jenkins  jdk、maven、git的的安装路径
+点击系统管理 》全局工具配置 》点击新增JDK （将jdk自动安装的勾去掉）输入JAVA_HOME（服务器jdk地址）》
+之后依次配置maven、git
+2.凭据配置
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

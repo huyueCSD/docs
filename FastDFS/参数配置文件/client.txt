@@ -1,0 +1,77 @@
+# 连接超时时间，针对socket套接字函数connect
+# connect timeout in seconds
+# default value is 30s
+connect_timeout=30
+
+# client的网络超时，单位为秒。发送或接收数据时，如果在超时时间后还不能发送或接收数据，则本次网络通信失败
+# network timeout in seconds
+# default value is 30s
+network_timeout=60
+
+# 存储日志的根目录
+# the base path to store log files
+base_path=/home/yuqing/fastdfs
+
+# tracker_server 的列表 要写端口
+# tracker_server can ocur more than once, and tracker_server format is
+#  "host:port", host can be hostname or ip address
+tracker_server=192.168.0.197:22122
+
+# 日志的级别
+#standard log level as syslog, case insensitive, value list:
+### emerg for emergency
+### alert
+### crit for critical
+### error
+### warn for warning
+### notice
+### info
+### debug
+log_level=info
+
+# 是否使用连接池
+# if use connection pool
+# default value is false
+# since V4.05
+use_connection_pool = false
+
+# 如果一个连接的空闲时间超过这个值将会被自动关闭
+# connections whose the idle time exceeds this time will be closed
+# unit: second
+# default value is 3600
+# since V4.05
+connection_pool_max_idle_time = 3600
+
+# 是否从FastDFS的tracker server加载参数
+# if load FastDFS parameters from tracker server
+# since V4.05
+# default value is false
+load_fdfs_parameters_from_tracker=false
+
+是否使用storage ID 代替IP，只有当load_fdfs_parameters_from_tracker为false时才有效
+# if use storage ID instead of IP address
+# same as tracker.conf
+# valid only when load_fdfs_parameters_from_tracker is false
+# default value is false
+# since V4.05
+use_storage_id = false
+
+# 指定storage_ids的路径，可以使用绝对路径和相对路径，只有当load_fdfs_parameters_from_tracker为false时才有效
+# specify storage ids filename, can use relative or absolute path
+# same as tracker.conf
+# valid only when load_fdfs_parameters_from_tracker is false
+# since V4.05
+storage_ids_filename = storage_ids.conf
+
+
+#tracker server的http端口
+#HTTP settings
+http.tracker_server_port=8080
+
+#use "#include" directive to include HTTP other settiongs
+##include http.conf
+--------------------- 
+作者：xingjiarong 
+来源：CSDN 
+原文：https://blog.csdn.net/xingjiarong/article/details/50752586 
+版权声明：本文为博主原创文章，转载请附上博文链接！
