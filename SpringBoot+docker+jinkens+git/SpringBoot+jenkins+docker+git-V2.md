@@ -37,22 +37,21 @@ jenkins是什么？
     docker服务器	          	 docker			192.168.0.33	安装docker、创建镜像运行java项目：tale
 
 #2.SShH免密登录
-1. 登录jenkins服务器，  
+###2.1.登录jenkins服务器，  
 	
 		cd .ssh  进入rsa公钥私钥文件存放的目录，  
 		删除目录下的id_rsa，id_rsa.pub文件
 
-2. 在目录下输入命令：  
+###2.2. 在目录下输入命令：  
 
 		ssh-keygen -t rsa 
 		（连续三次回车）该目录下会产生id_rsa，id_rsa.pub文件
-3. 把公钥拷贝到docker服务器 
-4.  
+###2.3. 把公钥拷贝到docker服务器 
 		ssh-copy-id  git@192.168.0.33  输入密码
 #3配置docker服务器
 ###注意：这个步骤在 docker服务器上操作
 
-1、安装Docker
+###3.1、安装Docker
 
 		[root@docker ~]# yum install -y yum-utils device-mapper-persistent-data lvm2
 		
@@ -60,18 +59,21 @@ jenkins是什么？
 		
 		[root@docker ~]# yum install docker-ce
 
-2、启动dokcer服务
+
+###3.2、启动dokcer服务
 
 	[root@docker ~]# systemctl restart docker
 
-3、部署JDK
+
+###3.3、部署JDK
 
 由于后面运行java容器需要jdk环境，jdk如果放在容器中运行容器又相当重，所以就在宿主机上部署jdk，后面创建java容器的时候把宿主机的jdk路径挂载到容器就去。部署jdk很简单，解压就行：
 
 	[root@docker ~]# tar -zxvf jdk-8u51-linux-x64.tar.gz -C /usr/local/  
 我们把它解压在docker这台宿主机的/usr/local目录中。
 
-4、构建基础镜像
+
+###3.4、构建基础镜像
 其实，这个镜像随便在哪台服务器上构建都行，在本文中就直接在这台docker服务器构建了：
 
 	[root@docker /]# mkdir /data
@@ -113,75 +115,71 @@ dockerfile内容：
 ##4部署jenkins
 
 ###注意：这个步骤在 jenkins 服务器上操作
-4.1环境配置安装步骤
+###4.1环境配置安装步骤
 
-1、部署JDK  
+####4.1.1、部署JDK  
 
 	[root@jenkins /]# tar -zxvf jdk-8u51-linux-x64.tar.gz -C /usr/local/
 
-2、部署maven
+####4.1.2、部署maven
 
 	[root@jenkins local]# tar -zxvf apache-maven-3.6.0-bin.tar.gz  -C /usr/local/
 
-3、进入jenkins的安装目录
+####4.1.3、jenkins安装步骤
+进入jenkins要安装的目录  
 
-获取jenkins安装源文件  
-
+	获取jenkins安装源文件  
 	wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo  
 	导入公钥  
 	rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
-
-安装jenkins  
-
+	安装jenkins  
 	yum install -y jenkins
-
 可修改jenkins  端口为8080（默认8080我没改）
 
 	vim /etc/sysconfig/jenkins
 	JENKINS_PORT='8080'
-
-4.修改jenkins的jdk的安装路径
+####4.1.4.修改jenkins的jdk的安装路径
 
 	vim  /etc/init.d/jenkins
 
 	candidates=""中的/usr/bin/java  修改为你的jdk安装路径    /usr/local/src/java/jdk1.8.0_45/bin/java  这是我的  
 
-5.配置防火墙放心jenkins端口（8080）
+####4.1.5.配置防火墙放心jenkins端口（8080）
 
 	重启jenkins
 
-6.使用浏览器 http://192.168.0.32:8080
+####4.1.6.使用浏览器 http://192.168.0.32:8080
 	
 	进入之后让你输入密码  密码在/var/lib/...提示的目录下
 	vim /var/lib/...
 
-7.进入安装插件   可能是离线状态
+####4.1.7.进入安装插件   可能是离线状态
 
 	此时不要在当前窗口操作  
 	再打开一个tab窗口输入http://192.168.0.32:8080/pluginManager/advanced  
 	在最下方的URL中修改为http://updates.jenkins.io/update-center.json     
 	提交  
 
-8.重启jenkins
+####4.1.8.重启jenkins
 
 	service jenkins restart  
 	在之前的离线窗口刷新 再次执行输入密码操作
 
-9.页面会跳转等待后进入CUstomize Jenkins 页面 选择安装（选第一个默认安装）
+####4.1.9.页面会跳转等待后进入CUstomize Jenkins 页面 选择安装（选第一个默认安装）
 
 	推荐安装（它就会自动安装）
 	进入之后创建用户信息
 	重启jenkins      service jenkins restart
 	需要额外安装的插件
 
-10.安装额外的插件
+####4.1.10.安装额外的插件
 
 	进入系统管理--插件管理--可选插件--搜索以下插件  直接安装
 	Maven Integration plugin
 	Deploy to container plugin
 	publish over ssh
 
-4.2 系统设置
+###4.2 系统设置
 
 	进入“系统管理” -- “系统设置”，主要是把docker这台服务器通过ssh的形式添加进来，后期部署dokcer容器
 
@@ -200,9 +198,9 @@ dockerfile内容：
 			将秘钥拷贝至Key中
 			点击测试连接即可
 
-4.3 配置Maven、jdk、git环境
+###4.3 配置Maven、jdk、git环境
 
-1、jdk配置
+####4.3.1、jdk配置
 
 	进“系统管理” -- "Global Tool Configuration"，添加jdk安装
 
@@ -211,7 +209,7 @@ dockerfile内容：
 	别名： jdk （自定义就行）
 	JAVA_HOME： /usr/local/jdk1.8.0_51   这个是你jenkins容器里的JDK路径，不是宿主机的JDK路径；
 
-2、maven配置
+####4.3.2、maven配置
 
 	进“系统管理” -- "Global Tool Configuration"，添加maven安装
 
@@ -219,25 +217,26 @@ dockerfile内容：
 
 	和上面的形式jdk一样，MAVEN_HOME 的路径也是指向jenkins容器里的maven路径
 
-3、git配置
+####4.3.3、git配置
 
 	这里我没有动git的配置，让它为默认配置
 
-4.4 配置java项目
+###4.4 配置java项目
 
-1.构建maven项目
+####4.4.1.构建maven项目
 	
 	新建任务 随便起个项目名  构建一个maven项目    确定 
 
-2、源码管理
+####4.4.2、源码管理
 
+	jenkins提供多种代码管理的接口 git、svn等
 	在“源码管理”项中选择Git 输入项目的git地址
 	点击添加钥匙jenkins凭据提供者
 	用户名中输入你git的用户名和密码  点击添加
 
 	Branches to build 中选中你将要拉取源代码的分支
 	
-3、构建触发器
+####4.4.3、构建触发器
 
     选这个 Build whenever a SNAPSHOT dependency is built
 	还可以定时触发  * * * * *   （代表每分钟构建一次）
@@ -251,13 +250,9 @@ dockerfile内容：
 	
 	当本job依赖的job被build时，执行本job
 	
-	build periodically
+	build periodically：隔一段时间build一次，不管版本库代码是否发生变化。
 	
-	隔一段时间build一次，不管版本库代码是否发生变化。
-	
-	poll scm
-	
-	隔一段时间比较一次源代码如果发生变更，那么就build。否则，不进行build。
+	poll scm：隔一段时间比较一次源代码如果发生变更，那么就build。否则，不进行build。
 
 	定时构建语法
 		第一颗*表示分钟，取值0~59
@@ -274,13 +269,15 @@ dockerfile内容：
 		4.每天的8点，12点，22点，一天构建3次
 			0 8,12,22 * * *
 	
-
-4、build配置
+####4.4.4、构建环境
+	（将时间戳添加到控制台输出）
+	Add timestamps to the Console Output
+####4.4.5、build
 	
 	Root POM输入： pom.xml
 	Goals and options输入：clean package
 
-5、构建后的配置
+####4.4.6、Post Steps
 
 	在“Post Steps”选项中，配置如下操作：
 		点击Add post-build step选择Send files orexecute commands over SSH
@@ -294,7 +291,18 @@ dockerfile内容：
 			cd /data
 			docker build -t hello-test-master .
 			docker run  --name hytest  -p 8080:8080 -d hello-test-master
-6.构建项目
+####4.4.7、构建后操作
+	
+	这里主要可以对结果进行一些可视化的处理，并提供反馈和通知，也可以触发其他任务。	
+	点解增加构建后步骤
+	点击Editable Email Notification（进入邮件内容详细配置界面）
+	Project Recipient List：这个项目的需要发送邮件给哪些人，可以在这里输入多个邮箱，中间以英文逗号隔开。
+
+邮件详细情况
+
+	https://www.cnblogs.com/yajing-zh/p/5111060.html
+
+####4.4.8、构建项目
 
 	回到项目界面 
 		1.点击立即构建  
@@ -311,11 +319,4 @@ dockerfile内容：
 
 		浏览器访问服务器地址
 		https://192.168.0.33:8080
-
-
-
-
-
-docker+jenkins+git搭建优质文章
-https://blog.51cto.com/ganbing/2085769
 
