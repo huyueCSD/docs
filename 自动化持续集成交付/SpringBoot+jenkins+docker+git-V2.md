@@ -102,7 +102,7 @@ dockerfile内容：
 		6.添加build后打包后的SpringBoot.jar文件
 		7.设置工作目录
 		8.向外暴露8080端口
-		9.执行命令
+		9.执行命令（运行一个java项目 后面是为这个项目提供了两个参数）
 
 此dockerfile安装了jdk 部署了jdk环境变量 向外暴露了8080端口  
 ###注意：在/data目录中上传jdk-8u51-linux-x64.tar.gz  
